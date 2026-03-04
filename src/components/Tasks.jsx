@@ -57,6 +57,22 @@ const Tasks = () => {
   const morningTasks = tasks.filter((task) => task.time === 'morning')
   const afternoonTasks = tasks.filter((task) => task.time === 'afternoon')
   const nightTasks = tasks.filter((task) => task.time === 'night')
+
+  const handleCheckboxClick = (taskId) =>{
+    const updatedTasks = tasks.map((task) => {
+      if(task.id === taskId) {
+        if(task.status === 'pending') {
+          return {...task, status: 'in_progress'}
+        } else if(task.status === 'in_progress') {
+          return {...task, status: 'done'}
+        } else if(task.status === 'done') {
+          return {...task, status: 'pending'}
+        }
+      }
+      return task
+    })
+    setTasks(updatedTasks)
+  }
   return (
     <div className="py-16 px-8 w-full">
       <div className="flex justify-between w-full">
@@ -79,19 +95,19 @@ const Tasks = () => {
         <div className="space-y-3">
           <TasksSeparator icon={<SunIcon />} label="Manhã" />
           {morningTasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} handleCheckboxClick={handleCheckboxClick} />
           ))}
         </div>
         <div className="space-y-3 my-6">
           <TasksSeparator icon={<SunCloudIcon />} label="Tarde" />
           {afternoonTasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} handleCheckboxClick={handleCheckboxClick} />
           ))}
         </div>
         <div className="space-y-3">
           <TasksSeparator icon={<MoonIcon />} label="Noite" />
           {nightTasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} handleCheckboxClick={handleCheckboxClick} />
           ))}
         </div>
       </div>
