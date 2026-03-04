@@ -7,6 +7,7 @@ import MoonIcon from '../assets/icons/moon.svg?react'
 import SunCloudIcon from '../assets/icons/cloud-sun.svg?react'
 import TasksSeparator from './TasksSeparator'
 import TaskItem from './TaskItem'
+import { toast } from 'sonner'
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([
@@ -62,10 +63,13 @@ const Tasks = () => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
         if (task.status === 'pending') {
+          toast.success('Tarefa iniciada!')
           return { ...task, status: 'in_progress' }
         } else if (task.status === 'in_progress') {
+          toast.success('Tarefa concluída!')
           return { ...task, status: 'done' }
         } else if (task.status === 'done') {
+          toast.success('Tarefa reaberta!')
           return { ...task, status: 'pending' }
         }
       }
@@ -77,6 +81,7 @@ const Tasks = () => {
   const handleDeleteTask = (taskId) => {
     const updatedTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(updatedTasks)
+    toast.success('Tarefa deletada com sucesso!')
   }
   return (
     <div className="py-16 px-8 w-full space-y-6">
