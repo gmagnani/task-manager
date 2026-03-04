@@ -74,7 +74,7 @@ const Tasks = () => {
     setTasks(updatedTasks)
   }
   return (
-    <div className="py-16 px-8 w-full">
+    <div className="py-16 px-8 w-full space-y-6">
       <div className="flex justify-between w-full">
         <div>
           <span className="text-xs font-semibold text-[#00adb5]">
