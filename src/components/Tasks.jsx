@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import Button from './Button'
-import { AddIcon, TrashIcon, SunIcon, SunCloudIcon, MoonIcon } from '../assets/icons'
+import {
+  AddIcon,
+  TrashIcon,
+  SunIcon,
+  SunCloudIcon,
+  MoonIcon,
+} from '../assets/icons'
 import TasksSeparator from './TasksSeparator'
 import TaskItem from './TaskItem'
 import { toast } from 'sonner'
