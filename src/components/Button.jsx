@@ -1,4 +1,4 @@
-const Button = ({ children, variant = 'primary' }) => {
+const Button = ({ children, variant = 'primary', ...props }) => {
   const getVariantClasses = () => {
     if (variant === 'primary') {
       return 'bg-[#00adb5] text-white'
@@ -9,7 +9,8 @@ const Button = ({ children, variant = 'primary' }) => {
   }
   return (
     <button
-      className={`px-3 py-1 text-xs ${getVariantClasses()} rounded-md flex items-center gap-2 hover:opacity-80 transition-opacity`}
+      className={`px-3 py-1 text-xs ${getVariantClasses()} cursor-pointer rounded-md flex items-center gap-2 hover:opacity-80 transition-opacity`}
+      {...props}
     >
       {children}
     </button>

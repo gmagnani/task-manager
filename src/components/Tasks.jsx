@@ -58,19 +58,24 @@ const Tasks = () => {
   const afternoonTasks = tasks.filter((task) => task.time === 'afternoon')
   const nightTasks = tasks.filter((task) => task.time === 'night')
 
-  const handleCheckboxClick = (taskId) =>{
+  const handleCheckboxClick = (taskId) => {
     const updatedTasks = tasks.map((task) => {
-      if(task.id === taskId) {
-        if(task.status === 'pending') {
-          return {...task, status: 'in_progress'}
-        } else if(task.status === 'in_progress') {
-          return {...task, status: 'done'}
-        } else if(task.status === 'done') {
-          return {...task, status: 'pending'}
+      if (task.id === taskId) {
+        if (task.status === 'pending') {
+          return { ...task, status: 'in_progress' }
+        } else if (task.status === 'in_progress') {
+          return { ...task, status: 'done' }
+        } else if (task.status === 'done') {
+          return { ...task, status: 'pending' }
         }
       }
       return task
     })
+    setTasks(updatedTasks)
+  }
+
+  const handleDeleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(updatedTasks)
   }
   return (
@@ -95,19 +100,34 @@ const Tasks = () => {
         <div className="space-y-3">
           <TasksSeparator icon={<SunIcon />} label="Manhã" />
           {morningTasks.map((task) => (
-            <TaskItem key={task.id} task={task} handleCheckboxClick={handleCheckboxClick} />
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleCheckboxClick={handleCheckboxClick}
+              handleDeleteTask={handleDeleteTask}
+            />
           ))}
         </div>
         <div className="space-y-3 my-6">
           <TasksSeparator icon={<SunCloudIcon />} label="Tarde" />
           {afternoonTasks.map((task) => (
-            <TaskItem key={task.id} task={task} handleCheckboxClick={handleCheckboxClick} />
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleCheckboxClick={handleCheckboxClick}
+              handleDeleteTask={handleDeleteTask}
+            />
           ))}
         </div>
         <div className="space-y-3">
           <TasksSeparator icon={<MoonIcon />} label="Noite" />
           {nightTasks.map((task) => (
-            <TaskItem key={task.id} task={task} handleCheckboxClick={handleCheckboxClick} />
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleCheckboxClick={handleCheckboxClick}
+              handleDeleteTask={handleDeleteTask}
+            />
           ))}
         </div>
       </div>
