@@ -14,6 +14,10 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
   const nodeRef = useRef()
 
   const handleSave = () => {
+    if (!title.trim() || !time || !description.trim()) {
+      alert('Por favor, preencha os campos obrigatórios')
+      return
+    }
     onAddTask({
       id: v4(),
       title,
