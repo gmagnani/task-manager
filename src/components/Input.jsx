@@ -1,6 +1,6 @@
 import InputLabel from './InputLabel'
 
-const Input = ({ label, ...props }) => {
+const Input = ({ label, error, ...props }) => {
   return (
     <div className="space-y-1 flex flex-col">
       <InputLabel id={props.id}>{label}</InputLabel>
@@ -8,6 +8,7 @@ const Input = ({ label, ...props }) => {
         className=" outline-[#9a9c9f] px-4 py-3 border border-solid border-[#ececec] rounded-lg placeholder:text-sm placeholder:text-[#9a9c9f] "
         {...props}
       />
+      {error && <p className="text-red-500 text-sm text-left">{error}</p>}
     </div>
   )
 }
