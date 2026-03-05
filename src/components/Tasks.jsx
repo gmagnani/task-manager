@@ -82,6 +82,11 @@ const Tasks = () => {
     setTasks(updatedTasks)
   }
 
+  const handleAddTask = (newTask) => {
+    setTasks([...tasks, newTask])
+    toast.success('Tarefa adicionada com sucesso!')
+  }
+
   const handleDeleteTask = (taskId) => {
     const updatedTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(updatedTasks)
@@ -104,7 +109,7 @@ const Tasks = () => {
             Nova tarefa <AddIcon />
           </Button>
 
-          <AddTaskDialog isOpen={isAddDialogOpen} onClose={() => setIsAddDialogOpen(false)} />
+          <AddTaskDialog isOpen={isAddDialogOpen} onClose={() => setIsAddDialogOpen(false)} onAddTask={handleAddTask} />
         </div>
       </div>
       <div className="p-6 bg-white rounded-xl">
