@@ -1,12 +1,9 @@
+import InputLabel from './InputLabel'
+
 const Input = ({ label, ...props }) => {
   return (
     <div className="space-y-1 flex flex-col">
-      <label
-        className=" text-sm font-semibold text-[#35383e] text-left"
-        htmlFor={props.id}
-      >
-        {label}
-      </label>
+      <InputLabel id={props.id}>{label}</InputLabel>
       <input
         className=" outline-[#9a9c9f] px-4 py-3 border border-solid border-[#ececec] rounded-lg placeholder:text-sm placeholder:text-[#9a9c9f] "
         {...props}
