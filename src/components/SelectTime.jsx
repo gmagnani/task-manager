@@ -7,7 +7,7 @@ const SelectTime = ({ id, label, error, ...props }) => {
       <select
         id={id}
         name={id}
-        className=" outline-[#9a9c9f] px-4 py-3 border border-solid border-[#ececec] rounded-lg text-sm text-[#9a9c9f] "
+        className=" outline-textGray px-4 py-3 border border-solid border-[#ececec] rounded-lg text-sm text-textGray "
         {...props}
       >
         <option value="">Selecione</option>

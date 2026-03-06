@@ -5,11 +5,11 @@ const TaskItem = ({ task, handleCheckboxClick, handleDeleteTask }) => {
   const getStatusClasses = () => {
     switch (task.status) {
       case 'pending':
-        return 'bg-[#35383e]/10 text-[#35383e]'
+        return 'bg-darkBlue/10 text-darkBlue'
       case 'in_progress':
-        return 'bg-[#ffaa04]/10 text-[#ffaa04]'
+        return 'bg-process/10 text-process'
       case 'done':
-        return 'bg-[#00adb5]/10 text-[#00adb5]'
+        return 'bg-primary/10 text-primary'
       default:
         return ''
     }
@@ -37,9 +37,9 @@ const TaskItem = ({ task, handleCheckboxClick, handleDeleteTask }) => {
       </div>
       <div className="flex items-center">
         <Button variant="ghost" onClick={() => handleDeleteTask(task.id)}>
-          <TrashIcon className="text=[#9a9c9f]" />
+          <TrashIcon className="text-textGray" />
         </Button>
-        <a href="#" className="text-[#00adb5] hover:text-[#00adb5]/80">
+        <a href="#" className="text-primary hover:text-primary/80">
           <DetailIcon />
         </a>
       </div>

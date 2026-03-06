@@ -1,7 +1,7 @@
 const InputLabel = ({ children, ...props }) => {
     return(
         <label
-        className=" text-sm font-semibold text-[#35383e] text-left"
+        className=" text-sm font-semibold text-darkBlue text-left"
         htmlFor={props.id}
       >
         {children}

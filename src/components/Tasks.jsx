@@ -96,7 +96,7 @@ const Tasks = () => {
     <div className="py-16 px-8 w-full space-y-6">
       <div className="flex justify-between w-full">
         <div>
-          <span className="text-xs font-semibold text-[#00adb5]">
+          <span className="text-xs font-semibold text-primary">
             Minhas tarefas
           </span>
           <h2 className="font-semibold text-xl">Minhas Tarefas</h2>

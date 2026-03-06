@@ -1,13 +1,13 @@
 const Button = ({ children, size = 'small' ,variant = 'primary', ...props}) => {
   const getVariantClasses = () => {
     if (variant === 'primary') {
-      return 'bg-[#00adb5] text-white'
+      return 'bg-primary text-white'
     }
     if (variant === 'ghost') {
-      return 'bg-transparent text-[#818181]'
+      return 'bg-transparent text-darkGray'
     }
     if(variant === 'secondary'){
-      return 'bg-[#f0f0f0] text-[#35383e]'
+      return 'bg-background text-darkBlue'
     }
   }
 

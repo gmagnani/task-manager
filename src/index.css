@@ -1,6 +1,16 @@
 @import 'tailwindcss';
 
-
+@theme {
+  --color-darkBlue: #35383e;
+  --color-primary: #99adb5;
+  --color-darkGray: #818181;
+  --color-textGray: #9a9c9f;
+  --color-lightGray: #eeeeee;
+  --color-white: #ffffff;
+  --color-background: #f8f8f8;
+  --color-process: #ffaa84;
+  --color-danger: #ef4444;
+}
 
 @layer base {
   @font-face {
