@@ -8,11 +8,11 @@ import SelectTime from './SelectTime'
 import { v4 } from 'uuid'
 
 const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
-  const [title, setTitle] = useState('')
-  const [time, setTime] = useState('')
-  const [description, setDescription] = useState('')
   const [error, setError] = useState([])
   const nodeRef = useRef()
+  const titleRef = useRef()
+  const timeRef = useRef()
+  const descriptionRef = useRef()
 
   const titleError = error.find((err) => err.field === 'title')
   const timeError = error.find((err) => err.field === 'time')
@@ -20,6 +20,9 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
 
   const handleSave = () => {
     const newError = []
+    const title = titleRef.current.value
+    const time = timeRef.current.value
+    const description = descriptionRef.current.value
     if (!title.trim()) {
       newError.push({ field: 'title', message: 'O título é obrigatório' })
     }
@@ -48,9 +51,6 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
 
   useEffect(() => {
     if (!isOpen) {
-      setTitle('')
-      setTime('')
-      setDescription('')
       setError([])
     }
   }, [isOpen])
@@ -80,25 +80,22 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
                 <Input
                   id="title"
                   label="Título"
-                  placeholder="Título"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Título"                  
                   error={titleError?.message}
+                  ref={titleRef}
                 />
                 <SelectTime
                   id="time"
                   label="Horário"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
                   error={timeError?.message}
+                  ref={timeRef}
                 />
                 <Input
                   id="description"
                   label="Descrição"
                   placeholder="Descrição"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
                   error={descriptionError?.message}
+                  ref={descriptionRef}
                 />
                 <div className="flex gap-3">
                   <Button size="large" variant="secondary" onClick={onClose}>
