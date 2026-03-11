@@ -33,6 +33,12 @@ const Tasks = () => {
     getTasks()
   }, [])
 
+  const handleClearTasks = () => {
+    setTasks([])
+    toast.success('Todas as tarefas foram removidas!')
+  }
+  
+
   const handleCheckboxClick = (taskId) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
@@ -72,7 +78,7 @@ const Tasks = () => {
           <h2 className="font-semibold text-xl">Minhas Tarefas</h2>
         </div>
         <div className="flex items-center gap-3">
-          <Button color="ghost">
+          <Button color="ghost" onClick={handleClearTasks}>
             Limpar tarefas <TrashIcon />
           </Button>
           <Button color="primary" onClick={() => setIsAddDialogOpen(true)}>
