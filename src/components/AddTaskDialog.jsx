@@ -98,7 +98,7 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
                   ref={descriptionRef}
                 />
                 <div className="flex gap-3">
-                  <Button size="large" variant="secondary" onClick={onClose}>
+                  <Button size="large" color="secondary" onClick={onClose}>
                     Cancelar
                   </Button>
                   <Button size="large" onClick={handleSave}>
