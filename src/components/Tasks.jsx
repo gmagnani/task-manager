@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from './Button'
 import {
   AddIcon,
@@ -13,55 +13,25 @@ import { toast } from 'sonner'
 import AddTaskDialog from './AddTaskDialog'
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: 'Tarefa 1',
-      description: 'Descrição da tarefa 1',
-      time: 'morning',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      title: 'Tarefa 2',
-      description: 'Descrição da tarefa 2',
-      time: 'afternoon',
-      status: 'done',
-    },
-    {
-      id: 3,
-      title: 'Tarefa 3',
-      description: 'Descrição da tarefa 3',
-      time: 'night',
-      status: 'pending',
-    },
-    {
-      id: 4,
-      title: 'Tarefa 4',
-      description: 'Descrição da tarefa 4',
-      time: 'morning',
-      status: 'in_progress',
-    },
-    {
-      id: 5,
-      title: 'Tarefa 5',
-      description: 'Descrição da tarefa 5',
-      time: 'afternoon',
-      status: 'pending',
-    },
-    {
-      id: 6,
-      title: 'Tarefa 6',
-      description: 'Descrição da tarefa 6',
-      time: 'night',
-      status: 'done',
-    },
-  ])
+  const [tasks, setTasks] = useState([])
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
 
   const morningTasks = tasks.filter((task) => task.time === 'morning')
   const afternoonTasks = tasks.filter((task) => task.time === 'afternoon')
   const nightTasks = tasks.filter((task) => task.time === 'night')
+
+  useEffect(() => {
+    const getTasks = async () => {
+      const response = await fetch('http://localhost:3000/tasks', {
+        method: 'GET',
+      })
+
+      const tasks = await response.json()
+      setTasks(tasks)
+    }
+
+    getTasks()
+  }, [])
 
   const handleCheckboxClick = (taskId) => {
     const updatedTasks = tasks.map((task) => {
@@ -109,7 +79,11 @@ const Tasks = () => {
             Nova tarefa <AddIcon />
           </Button>
 
-          <AddTaskDialog isOpen={isAddDialogOpen} onClose={() => setIsAddDialogOpen(false)} onAddTask={handleAddTask} />
+          <AddTaskDialog
+            isOpen={isAddDialogOpen}
+            onClose={() => setIsAddDialogOpen(false)}
+            onAddTask={handleAddTask}
+          />
         </div>
       </div>
       <div className="p-6 bg-white rounded-xl">
