@@ -71,11 +71,21 @@ const Tasks = () => {
     toast.success('Tarefa adicionada com sucesso!')
   }
 
-  const handleDeleteTask = (taskId) => {
+  const handleDeleteTask = async (taskId) => {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      toast.error('Erro ao deletar tarefa!')
+      return
+    }
+
     const updatedTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(updatedTasks)
     toast.success('Tarefa deletada com sucesso!')
   }
+
+
   return (
     <div className="py-16 px-8 w-full space-y-6">
       <div className="flex justify-between w-full">
