@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CheckIcon, DetailIcon, LoaderIcon, TrashIcon } from '../assets/icons'
 import Button from './Button'
+import { Link } from 'react-router'
 
 const TaskItem = ({ task, handleCheckboxClick, onDeleteSuccess }) => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false)
@@ -54,16 +55,23 @@ const TaskItem = ({ task, handleCheckboxClick, onDeleteSuccess }) => {
         {task.title}
       </div>
       <div className="flex items-center">
-        <Button color="ghost" onClick={handleDeleteTask} disabled={deleteIsLoading}>
+        <Button
+          color="ghost"
+          onClick={handleDeleteTask}
+          disabled={deleteIsLoading}
+        >
           {deleteIsLoading ? (
             <LoaderIcon className="animate-spin" />
           ) : (
             <TrashIcon className="text-textGray" />
           )}
         </Button>
-        <a href="#" className="text-primary hover:text-primary/80">
+        <Link
+          to={`/task/${task.id}`}
+          className="text-primary hover:text-primary/80"
+        >
           <DetailIcon />
-        </a>
+        </Link>
       </div>
     </div>
   )
