@@ -95,6 +95,11 @@ const Tasks = () => {
       <div className="p-6 bg-white rounded-xl">
         <div className="space-y-3">
           <TasksSeparator icon={<SunIcon />} label="Manhã" />
+          {morningTasks.length === 0 && (
+            <p className="text-sm text-textGray">
+              Nenhuma tarefa para o período da manhã.
+            </p>
+          )}
           {morningTasks.map((task) => (
             <TaskItem
               key={task.id}
@@ -106,6 +111,11 @@ const Tasks = () => {
         </div>
         <div className="space-y-3 my-6">
           <TasksSeparator icon={<SunCloudIcon />} label="Tarde" />
+          {afternoonTasks.length === 0 && (
+            <p className="text-sm text-textGray">
+              Nenhuma tarefa para o período da tarde.
+            </p>
+          )}
           {afternoonTasks.map((task) => (
             <TaskItem
               key={task.id}
@@ -117,6 +127,11 @@ const Tasks = () => {
         </div>
         <div className="space-y-3">
           <TasksSeparator icon={<MoonIcon />} label="Noite" />
+          {nightTasks.length === 0 && (
+            <p className="text-sm text-textGray">
+              Nenhuma tarefa para o período da noite.
+            </p>
+          )}
           {nightTasks.map((task) => (
             <TaskItem
               key={task.id}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'
 import Sidebar from '../components/Sidebar'
 import { ArrowLeftIcon, ChevronRightIcon, TrashIcon } from '../assets/icons'
 import Button from '../components/Button'
@@ -12,6 +12,31 @@ const TaskDetails = () => {
   const navigate = useNavigate()
 
   const handleBackClick = () => {
+    navigate(-1)
+  }
+
+  const handleSaveClick = async () => {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: 'PUT',
+      body: JSON.stringify(task),
+    })
+    if (!response.ok) {
+      toast.error('Erro ao salvar tarefa!')
+      return
+    }
+    toast.success('Tarefa salva com sucesso!')
+    navigate(-1)
+  }
+
+  const handleDeleteClick = async () => {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      toast.error('Erro ao deletar tarefa!')
+      return
+    }
+    toast.success('Tarefa deletada com sucesso!')
     navigate(-1)
   }
 
@@ -41,7 +66,9 @@ const TaskDetails = () => {
               <ArrowLeftIcon />
             </button>
             <div className="flex items-center gap-1 text-xs">
-              <span className="text-textGray cursor-pointer" onClick={handleBackClick}>Minhas tarefas</span>{' '}
+              <Link to="/" className="text-textGray cursor-pointer">
+                Minhas tarefas
+              </Link>{' '}
               <ChevronRightIcon className="text-textGray" />{' '}
               <span className="text-primary font-semibold">{task?.title}</span>
             </div>
@@ -56,22 +83,24 @@ const TaskDetails = () => {
         </div>
         <div className="bg-white p-6 rounded-xl space-y-6">
           <div>
-            <Input id="title" label="Título" value={task?.title} />
+            <Input id="title" label="Título" defaultValue={task?.title} />
           </div>
           <div>
-            <SelectTime id="time" label="Horário" value={task?.time} />
+            <SelectTime id="time" label="Horário" defaultValue={task?.time} />
           </div>
           <div>
             <Input
               id="description"
               label="Descrição"
-              value={task?.description}
+              defaultValue={task?.description}
             />
           </div>
         </div>
-        <div className='flex justify-end w-full gap-3'>
-            <Button color="secondary" size='large'>Cancelar</Button>
-            <Button size='large'>Salvar</Button>
+        <div className="flex justify-end w-full gap-3">
+          <Button color="secondary" size="large">
+            Cancelar
+          </Button>
+          <Button size="large">Salvar</Button>
         </div>
       </div>
     </div>
