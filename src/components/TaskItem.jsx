@@ -1,7 +1,25 @@
+import { useState } from 'react'
 import { CheckIcon, DetailIcon, LoaderIcon, TrashIcon } from '../assets/icons'
 import Button from './Button'
 
-const TaskItem = ({ task, handleCheckboxClick, handleDeleteTask }) => {
+const TaskItem = ({ task, handleCheckboxClick, onDeleteSuccess }) => {
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false)
+
+  const handleDeleteTask = async () => {
+    setDeleteIsLoading(true)
+
+    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      setDeleteIsLoading(false)
+      toast.error('Erro ao deletar tarefa!')
+      return
+    }
+    onDeleteSuccess(task.id)
+    setDeleteIsLoading(false)
+  }
+
   const getStatusClasses = () => {
     switch (task.status) {
       case 'pending':
@@ -36,8 +54,12 @@ const TaskItem = ({ task, handleCheckboxClick, handleDeleteTask }) => {
         {task.title}
       </div>
       <div className="flex items-center">
-        <Button color="ghost" onClick={() => handleDeleteTask(task.id)}>
-          <TrashIcon className="text-textGray" />
+        <Button color="ghost" onClick={handleDeleteTask} disabled={deleteIsLoading}>
+          {deleteIsLoading ? (
+            <LoaderIcon className="animate-spin" />
+          ) : (
+            <TrashIcon className="text-textGray" />
+          )}
         </Button>
         <a href="#" className="text-primary hover:text-primary/80">
           <DetailIcon />
