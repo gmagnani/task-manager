@@ -1,31 +1,64 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import Sidebar from '../components/Sidebar'
-import { ArrowLeftIcon, ChevronRightIcon, TrashIcon } from '../assets/icons'
+import {
+  ArrowLeftIcon,
+  ChevronRightIcon,
+  LoaderIcon,
+  TrashIcon,
+} from '../assets/icons'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import SelectTime from '../components/SelectTime'
+import { useForm } from 'react-hook-form'
+
+import { toast } from 'sonner'
 
 const TaskDetails = () => {
   const { taskId } = useParams()
   const [task, setTask] = useState()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const getTask = async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: 'GET',
+      })
+
+      const task = await response.json()
+      setTask(task)
+      reset(task)
+    }
+
+    getTask()
+  }, [taskId, reset])
 
   const handleBackClick = () => {
     navigate(-1)
   }
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (data) => {
     const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: 'PUT',
-      body: JSON.stringify(task),
+      method: 'PATCH',
+      body: JSON.stringify({
+        title: data.title.trim(),
+        time: data.time,
+        description: data.description.trim(),
+      }),
     })
     if (!response.ok) {
       toast.error('Erro ao salvar tarefa!')
       return
     }
+    const updatedTask = response.json()
+    setTask(updatedTask)
     toast.success('Tarefa salva com sucesso!')
-    navigate(-1)
   }
 
   const handleDeleteClick = async () => {
@@ -39,19 +72,6 @@ const TaskDetails = () => {
     toast.success('Tarefa deletada com sucesso!')
     navigate(-1)
   }
-
-  useEffect(() => {
-    const getTask = async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: 'GET',
-      })
-
-      const task = await response.json()
-      setTask(task)
-    }
-
-    getTask()
-  }, [taskId])
 
   return (
     <div className="flex">
@@ -76,32 +96,68 @@ const TaskDetails = () => {
           </div>
 
           <div>
-            <Button className="h-fit self-end" color="danger">
+            <Button
+              className="h-fit self-end"
+              color="danger"
+              onClick={handleDeleteClick}
+            >
               <TrashIcon /> Deletar tarefa
             </Button>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl space-y-6">
-          <div>
-            <Input id="title" label="Título" defaultValue={task?.title} />
+        <form onSubmit={handleSubmit(handleSaveClick)}>
+          <div className="bg-white p-6 rounded-xl space-y-6">
+            <div>
+              <Input
+                id="title"
+                label="Título"
+                {...register('title', {
+                  required: 'O título é obrigatório',
+                  validate: (value) => {
+                    if (!value.trim()) return 'O título não pode ser vazio'
+                    return true
+                  },
+                })}
+                error={errors?.title?.message}
+              />
+            </div>
+            <div>
+              <SelectTime
+                id="time"
+                label="Horário"
+                {...register('time', { required: 'O horário é obrigatório' })}
+                error={errors?.time?.message}
+              />
+            </div>
+            <div>
+              <Input
+                id="description"
+                label="Descrição"
+                {...register('description', {
+                  required: 'A descrição é obrigatória',
+                  validate: (value) => {
+                    if (!value.trim()) return 'A descrição não pode ser vazia'
+                    return true
+                  },
+                })}
+                error={errors?.description?.message}
+              />
+            </div>
           </div>
-          <div>
-            <SelectTime id="time" label="Horário" defaultValue={task?.time} />
+          <div className="flex justify-end w-full gap-3">
+            <Button color="secondary" size="large">
+              Cancelar
+            </Button>
+            <Button size="large" type="submit" disabled={isSubmitting}>
+              {}
+              {isSubmitting ? (
+                <LoaderIcon className="animate-spin" />
+              ) : (
+                'Salvar'
+              )}
+            </Button>
           </div>
-          <div>
-            <Input
-              id="description"
-              label="Descrição"
-              defaultValue={task?.description}
-            />
-          </div>
-        </div>
-        <div className="flex justify-end w-full gap-3">
-          <Button color="secondary" size="large">
-            Cancelar
-          </Button>
-          <Button size="large">Salvar</Button>
-        </div>
+        </form>
       </div>
     </div>
   )
