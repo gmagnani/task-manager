@@ -115,13 +115,19 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTaskSucces }) => {
                   disabled={addTaskIsLoading}
                 />
                 <div className="flex gap-3">
-                  <Button size="large" color="secondary" onClick={onClose}>
+                  <Button
+                    size="large"
+                    color="secondary"
+                    className="w-full"
+                    onClick={onClose}
+                  >
                     Cancelar
                   </Button>
                   <Button
                     size="large"
                     onClick={handleSave}
                     disabled={addTaskIsLoading}
+                    className="w-full"
                   >
                     {addTaskIsLoading ? (
                       <LoaderIcon className="animate-spin" />

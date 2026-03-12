@@ -14,10 +14,11 @@ const Button = ({
         primary: 'bg-primary text-white',
         ghost: 'bg-transparent text-darkGray',
         secondary: 'bg-background text-darkBlue',
+        danger: 'bg-danger text-white',
       },
       size: {
         small: 'text-xs py-1',
-        large: 'text-sm py-2 w-full',
+        large: 'text-sm py-2',
       },
       disable: {
         true: 'opacity-50 cursor-not-allowed hover:opacity-50',
