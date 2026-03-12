@@ -97,12 +97,14 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTaskSucces }) => {
                   placeholder="Título"
                   error={titleError?.message}
                   ref={titleRef}
+                  disabled={addTaskIsLoading}
                 />
                 <SelectTime
                   id="time"
                   label="Horário"
                   error={timeError?.message}
                   ref={timeRef}
+                  disabled={addTaskIsLoading}
                 />
                 <Input
                   id="description"
@@ -110,6 +112,7 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTaskSucces }) => {
                   placeholder="Descrição"
                   error={descriptionError?.message}
                   ref={descriptionRef}
+                  disabled={addTaskIsLoading}
                 />
                 <div className="flex gap-3">
                   <Button size="large" color="secondary" onClick={onClose}>
