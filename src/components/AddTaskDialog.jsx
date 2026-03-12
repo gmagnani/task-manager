@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from 'react'
 import './AddTaskDialog.css'
 import SelectTime from './SelectTime'
 import { v4 } from 'uuid'
+import { LoaderIcon } from '../assets/icons'
 
-const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
+const AddTaskDialog = ({ isOpen, onClose, onAddTaskSucces }) => {
   const [error, setError] = useState([])
+  const [addTaskIsLoading, setAddTaskIsLoading] = useState(false)
   const nodeRef = useRef()
   const titleRef = useRef()
   const timeRef = useRef()
@@ -18,7 +20,7 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
   const timeError = error.find((err) => err.field === 'time')
   const descriptionError = error.find((err) => err.field === 'description')
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newError = []
     const title = titleRef.current.value
     const time = timeRef.current.value
@@ -39,13 +41,25 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
       setError(newError)
       return
     }
-    onAddTask({
+    setAddTaskIsLoading(true)
+    const newTask = {
       id: v4(),
       title,
       time,
       description,
       status: 'pending',
+    }
+    const response = await fetch('http://localhost:3000/tasks', {
+      method: 'POST',
+      body: JSON.stringify(newTask),
     })
+    if (!response.ok) {
+      setAddTaskIsLoading(false)
+      toast.error('Erro ao adicionar tarefa!')
+      return
+    }
+    setAddTaskIsLoading(false)
+    onAddTaskSucces(newTask)
     onClose()
   }
 
@@ -80,7 +94,7 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
                 <Input
                   id="title"
                   label="Título"
-                  placeholder="Título"                  
+                  placeholder="Título"
                   error={titleError?.message}
                   ref={titleRef}
                 />
@@ -101,8 +115,16 @@ const AddTaskDialog = ({ isOpen, onClose, onAddTask }) => {
                   <Button size="large" color="secondary" onClick={onClose}>
                     Cancelar
                   </Button>
-                  <Button size="large" onClick={handleSave}>
-                    Salvar
+                  <Button
+                    size="large"
+                    onClick={handleSave}
+                    disabled={addTaskIsLoading}
+                  >
+                    {addTaskIsLoading ? (
+                      <LoaderIcon className="animate-spin" />
+                    ) : (
+                      'Salvar'
+                    )}
                   </Button>
                 </div>
               </div>

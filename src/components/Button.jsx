@@ -19,6 +19,9 @@ const Button = ({
         small: 'text-xs py-1',
         large: 'text-sm py-2 w-full',
       },
+      disable: {
+        true: 'opacity-50 cursor-not-allowed hover:opacity-50',
+      },
     },
     defaultVariants: {
       color: 'primary',
@@ -26,7 +29,14 @@ const Button = ({
     },
   })
 
-  return <button className={button({color, size, className})} {...props}>{children}</button>
+  return (
+    <button
+      className={button({ color, size, disable: props.disabled, className })}
+      {...props}
+    >
+      {children}
+    </button>
+  )
 }
 
 export default Button
