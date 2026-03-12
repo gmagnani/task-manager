@@ -41,6 +41,13 @@
       "description": "Descrição da tarefa 6",
       "time": "night",
       "status": "done"
+    },
+    {
+      "id": "b8a28b90-a448-4773-b978-0ad524f43d25",
+      "title": "Teste 1",
+      "time": "morning",
+      "description": "Descrição da tarefa 1 teste",
+      "status": "pending"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
