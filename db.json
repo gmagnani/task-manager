@@ -29,13 +29,6 @@
       "status": "in_progress"
     },
     {
-      "id": "5",
-      "title": "Tarefa 5",
-      "description": "Descrição da tarefa 5",
-      "time": "afternoon",
-      "status": "pending"
-    },
-    {
       "id": "6",
       "title": "Tarefa 6",
       "description": "Descrição da tarefa 6",

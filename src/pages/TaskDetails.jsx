@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import Sidebar from '../components/Sidebar'
 import {
@@ -13,64 +12,95 @@ import SelectTime from '../components/SelectTime'
 import { useForm } from 'react-hook-form'
 
 import { toast } from 'sonner'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const TaskDetails = () => {
   const { taskId } = useParams()
-  const [task, setTask] = useState()
+  const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const getTask = async () => {
+  const { data: task } = useQuery({
+    queryKey: ['task', taskId],
+    queryFn: async () => {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: 'GET',
       })
+      const data = await response.json()
+      reset(data)
+      return data
+    },
+  })
+  const { mutate: updateTask, isPending: isUpdating} = useMutation({
+    mutationKey: ['updateTask', taskId],
+    mutationFn: async (newTask) => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          title: newTask.title.trim(),
+          time: newTask.time,
+          description: newTask.description.trim(),
+        }),
+      })
+      if (!response.ok) {
+        throw new Error()
+      }
+      return response.json()
+    },
+  })
 
-      const task = await response.json()
-      setTask(task)
-      reset(task)
-    }
-
-    getTask()
-  }, [taskId, reset])
+  const { mutate: deleteTask, isPending: isDeleting} = useMutation({
+    mutationKey: ['deleteTask', taskId],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: 'DELETE',
+      })
+      return response.json()
+    },
+  })
 
   const handleBackClick = () => {
     navigate(-1)
   }
 
   const handleSaveClick = async (data) => {
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        title: data.title.trim(),
-        time: data.time,
-        description: data.description.trim(),
-      }),
+    updateTask(data, {
+      onSuccess: () => {
+        queryClient.setQueryData('tasks', (oldTasks) =>
+          oldTasks.map((oldTask) => {
+            if (oldTask.id === taskId) {
+              return { ...oldTask, ...data }
+            }
+            return oldTask
+          })
+        )
+        toast.success('Tarefa atualizada com sucesso!')
+      },
+      onError: () => {
+        toast.error('Erro ao atualizar tarefa!')
+      },
     })
-    if (!response.ok) {
-      toast.error('Erro ao salvar tarefa!')
-      return
-    }
-    const updatedTask = response.json()
-    setTask(updatedTask)
-    toast.success('Tarefa salva com sucesso!')
   }
 
   const handleDeleteClick = async () => {
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: 'DELETE',
+    deleteTask(undefined, {
+      onSuccess: () => {
+        queryClient.setQueryData('tasks', (oldTasks) =>
+          oldTasks.filter((oldTask) => oldTask.id !== taskId)
+        )
+
+        toast.success('Tarefa deletada com sucesso!')
+        navigate(-1)
+      },
+      onError: () => {
+        toast.error('Erro ao deletar tarefa!')
+      },
     })
-    if (!response.ok) {
-      toast.error('Erro ao deletar tarefa!')
-      return
-    }
-    toast.success('Tarefa deletada com sucesso!')
-    navigate(-1)
   }
 
   return (
@@ -100,6 +130,7 @@ const TaskDetails = () => {
               className="h-fit self-end"
               color="danger"
               onClick={handleDeleteClick}
+              disabled={isDeleting}
             >
               <TrashIcon /> Deletar tarefa
             </Button>
@@ -145,12 +176,9 @@ const TaskDetails = () => {
             </div>
           </div>
           <div className="flex justify-end w-full gap-3">
-            <Button color="secondary" size="large">
-              Cancelar
-            </Button>
-            <Button size="large" type="submit" disabled={isSubmitting}>
+            <Button size="large" type="submit" disabled={isUpdating || isDeleting}>
               {}
-              {isSubmitting ? (
+              {isUpdating || isDeleting ? (
                 <LoaderIcon className="animate-spin" />
               ) : (
                 'Salvar'
