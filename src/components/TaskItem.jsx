@@ -1,24 +1,33 @@
-import { useState } from 'react'
 import { CheckIcon, DetailIcon, LoaderIcon, TrashIcon } from '../assets/icons'
 import Button from './Button'
 import { Link } from 'react-router'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-const TaskItem = ({ task, handleCheckboxClick, onDeleteSuccess }) => {
-  const [deleteIsLoading, setDeleteIsLoading] = useState(false)
+const TaskItem = ({ task, handleCheckboxClick }) => {
+  const queryClient = useQueryClient()
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['deleteTask', task.id],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        method: 'DELETE',
+      })
+      return response.json()
+    },
+  })
 
   const handleDeleteTask = async () => {
-    setDeleteIsLoading(true)
-
-    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-      method: 'DELETE',
+    mutate(undefined, {
+      onSuccess: () => {
+        queryClient.setQueryData('tasks', (oldTasks) =>
+          oldTasks.filter((oldTask) => oldTask.id !== task.id)
+        )
+        toast.success('Tarefa deletada com sucesso!')
+      },
+      onError: () => {
+        toast.error('Erro ao deletar tarefa!')
+      },
     })
-    if (!response.ok) {
-      setDeleteIsLoading(false)
-      toast.error('Erro ao deletar tarefa!')
-      return
-    }
-    onDeleteSuccess(task.id)
-    setDeleteIsLoading(false)
   }
 
   const getStatusClasses = () => {
@@ -55,12 +64,8 @@ const TaskItem = ({ task, handleCheckboxClick, onDeleteSuccess }) => {
         {task.title}
       </div>
       <div className="flex items-center">
-        <Button
-          color="ghost"
-          onClick={handleDeleteTask}
-          disabled={deleteIsLoading}
-        >
-          {deleteIsLoading ? (
+        <Button color="ghost" onClick={handleDeleteTask} disabled={isPending}>
+          {isPending ? (
             <LoaderIcon className="animate-spin" />
           ) : (
             <TrashIcon className="text-textGray" />

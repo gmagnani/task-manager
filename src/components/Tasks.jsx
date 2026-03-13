@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Button from './Button'
 import {
   AddIcon,
@@ -60,14 +60,6 @@ const Tasks = () => {
     toast.success('Tarefa adicionada com sucesso!')
   }
 
-  const onDeleteSuccess = async (taskId) => {
-    queryClient.setQueryData('tasks', (oldTasks) =>
-      oldTasks.filter((task) => task.id !== taskId)
-    )
-
-    toast.success('Tarefa deletada com sucesso!')
-  }
-
   return (
     <div className="py-16 px-8 w-full space-y-6">
       <div className="flex justify-between w-full">
@@ -105,7 +97,6 @@ const Tasks = () => {
               key={task.id}
               task={task}
               handleCheckboxClick={handleCheckboxClick}
-              onDeleteSuccess={onDeleteSuccess}
             />
           ))}
         </div>
@@ -121,7 +112,6 @@ const Tasks = () => {
               key={task.id}
               task={task}
               handleCheckboxClick={handleCheckboxClick}
-              onDeleteSuccess={onDeleteSuccess}
             />
           ))}
         </div>
@@ -137,7 +127,6 @@ const Tasks = () => {
               key={task.id}
               task={task}
               handleCheckboxClick={handleCheckboxClick}
-              onDeleteSuccess={onDeleteSuccess}
             />
           ))}
         </div>
