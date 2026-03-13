@@ -1,22 +1,23 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 
 export const useAddTask = () => {
-    const queryClient = useQueryClient()
-    return useMutation({
+  const queryClient = useQueryClient()
+  return useMutation({
     mutationKey: 'addTask',
     mutationFn: async (newTask) => {
-      const response = await fetch('http://localhost:3000/tasks', {
-        method: 'POST',
-        body: JSON.stringify(newTask),
-      })
-      if (!response.ok) {
-        throw new Error()
-      }
-      const createdTask = await response.json()
+      const { data: createdTask } = await axios.post(
+        'http://localhost:3000/tasks',
+        newTask
+      )
+
       return createdTask
     },
     onSuccess: (createdTask) => {
-        queryClient.setQueryData('tasks', (oldTasks) => [...oldTasks, createdTask])
-      },
+      queryClient.setQueryData('tasks', (oldTasks) => [
+        ...oldTasks,
+        createdTask,
+      ])
+    },
   })
 }
