@@ -55,11 +55,6 @@ const Tasks = () => {
     queryClient.setQueryData('tasks', updatedTasks)
   }
 
-  const onAddTaskSucces = async (newTask) => {
-    queryClient.setQueryData('tasks', (oldTasks) => [...oldTasks, newTask])
-    toast.success('Tarefa adicionada com sucesso!')
-  }
-
   return (
     <div className="py-16 px-8 w-full space-y-6">
       <div className="flex justify-between w-full">
@@ -80,7 +75,6 @@ const Tasks = () => {
           <AddTaskDialog
             isOpen={isAddDialogOpen}
             onClose={() => setIsAddDialogOpen(false)}
-            onAddTaskSucces={onAddTaskSucces}
           />
         </div>
       </div>
