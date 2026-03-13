@@ -10,13 +10,13 @@ import Button from '../components/Button'
 import Input from '../components/Input'
 import SelectTime from '../components/SelectTime'
 import { useForm } from 'react-hook-form'
-
 import { toast } from 'sonner'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useUpdateTask } from '../hooks/data/use-update-task'
+import { useGetTask } from '../hooks/data/use-get-task'
+import { useDeleteTask } from '../hooks/data/use-delete-task'
 
 const TaskDetails = () => {
   const { taskId } = useParams()
-  const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
@@ -24,45 +24,9 @@ const TaskDetails = () => {
     reset,
   } = useForm()
   const navigate = useNavigate()
-
-  const { data: task } = useQuery({
-    queryKey: ['task', taskId],
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: 'GET',
-      })
-      const data = await response.json()
-      reset(data)
-      return data
-    },
-  })
-  const { mutate: updateTask, isPending: isUpdating} = useMutation({
-    mutationKey: ['updateTask', taskId],
-    mutationFn: async (newTask) => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          title: newTask.title.trim(),
-          time: newTask.time,
-          description: newTask.description.trim(),
-        }),
-      })
-      if (!response.ok) {
-        throw new Error()
-      }
-      return response.json()
-    },
-  })
-
-  const { mutate: deleteTask, isPending: isDeleting} = useMutation({
-    mutationKey: ['deleteTask', taskId],
-    mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: 'DELETE',
-      })
-      return response.json()
-    },
-  })
+  const { data: task } = useGetTask(taskId, reset)
+  const { mutate: updateTask, isPending: isUpdating } = useUpdateTask(taskId)
+  const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask(taskId)
 
   const handleBackClick = () => {
     navigate(-1)
@@ -71,14 +35,6 @@ const TaskDetails = () => {
   const handleSaveClick = async (data) => {
     updateTask(data, {
       onSuccess: () => {
-        queryClient.setQueryData('tasks', (oldTasks) =>
-          oldTasks.map((oldTask) => {
-            if (oldTask.id === taskId) {
-              return { ...oldTask, ...data }
-            }
-            return oldTask
-          })
-        )
         toast.success('Tarefa atualizada com sucesso!')
       },
       onError: () => {
@@ -90,10 +46,6 @@ const TaskDetails = () => {
   const handleDeleteClick = async () => {
     deleteTask(undefined, {
       onSuccess: () => {
-        queryClient.setQueryData('tasks', (oldTasks) =>
-          oldTasks.filter((oldTask) => oldTask.id !== taskId)
-        )
-
         toast.success('Tarefa deletada com sucesso!')
         navigate(-1)
       },
@@ -176,7 +128,11 @@ const TaskDetails = () => {
             </div>
           </div>
           <div className="flex justify-end w-full gap-3">
-            <Button size="large" type="submit" disabled={isUpdating || isDeleting}>
+            <Button
+              size="large"
+              type="submit"
+              disabled={isUpdating || isDeleting}
+            >
               {}
               {isUpdating || isDeleting ? (
                 <LoaderIcon className="animate-spin" />
