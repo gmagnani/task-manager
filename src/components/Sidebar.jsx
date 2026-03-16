@@ -3,7 +3,7 @@ import { HomeIcon, TasksIcon } from '../assets/icons'
 
 const Sidebar = () => {
   return (
-    <div className="h-screen w-72 bg-white">
+    <div className="h-screen w-72 min-w-72 bg-white">
       <div className="px-8 py-6 space-y-4">
         <h1 className="text-xl font-semibold text-primary">Task Manager</h1>
         <p>
@@ -12,8 +12,8 @@ const Sidebar = () => {
         </p>
       </div>
       <div className="flex flex-col p-2 gap-2">
-        <SideBarButton color="unselected"><HomeIcon/>Inicio</SideBarButton>
-        <SideBarButton color="selected"><TasksIcon/>Minhas Tarefas</SideBarButton>
+        <SideBarButton href='/' color="unselected"><HomeIcon/>Inicio</SideBarButton>
+        <SideBarButton href='/tasks' color="selected"><TasksIcon/>Minhas Tarefas</SideBarButton>
       </div>
     </div>
   )

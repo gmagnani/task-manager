@@ -15,7 +15,7 @@ import { useUpdateTask } from '../hooks/data/use-update-task'
 import { useGetTask } from '../hooks/data/use-get-task'
 import { useDeleteTask } from '../hooks/data/use-delete-task'
 
-const TaskDetails = () => {
+const TaskDetailsPage = () => {
   const { taskId } = useParams()
   const {
     register,
@@ -147,4 +147,4 @@ const TaskDetails = () => {
   )
 }
 
-export default TaskDetails
+export default TaskDetailsPage
