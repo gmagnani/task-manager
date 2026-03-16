@@ -10,8 +10,8 @@ import TasksIcon from './tasks.svg?react'
 import TrashIcon from './trash.svg?react'
 import ChevronRightIcon from './chevron-right.svg?react'
 import ArrowLeftIcon from './arrow-left.svg?react'
-
-
+import Tasks2Icon from './tasks-2.svg?react'
+import GlassWaterIcon from './glass-water.svg?react'
 
 export {
   AddIcon,
@@ -26,4 +26,6 @@ export {
   TrashIcon,
   ChevronRightIcon,
   ArrowLeftIcon,
+  Tasks2Icon,
+  GlassWaterIcon,
 }

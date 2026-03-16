@@ -4,11 +4,11 @@ import './index.css'
 
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
-import TaskDetailsPage from './pages/TaskDetailsPage.jsx'
+import TaskDetailsPage from './pages/TaskDetailsPage'
 import { Toaster } from 'sonner'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import TasksPage from './pages/TasksPage.js'
-import HomePage from './pages/HomePage.js'
+import TasksPage from './pages/TasksPage'
+import HomePage from './pages/HomePage'
 
 const queryClient = new QueryClient()
 

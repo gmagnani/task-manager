@@ -3,9 +3,11 @@ import Button from './Button'
 import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { useDeleteTask } from '../hooks/data/use-delete-task'
+import { useUpdateTask } from '../hooks/data/use-update-task'
 
-const TaskItem = ({ task, handleCheckboxClick }) => {
+const TaskItem = ({ task }) => {
   const { mutate: deleteTask, isPending } = useDeleteTask(task.id)
+  const { mutate: updateTask } = useUpdateTask(task.id)
 
   const handleDeleteTask = async () => {
     deleteTask(undefined, {
@@ -29,6 +31,32 @@ const TaskItem = ({ task, handleCheckboxClick }) => {
       default:
         return ''
     }
+  }
+
+  const getNewerStatus = () => {
+    if (task.status === 'pending') {
+      return 'in_progress'
+    }
+    if (task.status === 'in_progress') {
+      return 'done'
+    }
+    if (task.status === 'done') {
+      return 'pending'
+    }
+  }
+
+  const handleCheckboxClick = () => {
+    updateTask(
+      { status: getNewerStatus() },
+      {
+        onSuccess: () => {
+          toast.success('Tarefa atualizada com sucesso!')
+        },
+        onError: () => {
+          toast.error('Erro ao atualizar tarefa!')
+        },
+      }
+    )
   }
   return (
     <div
