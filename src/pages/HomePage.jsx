@@ -22,7 +22,7 @@ const HomePage = () => {
             </div>
 
             <div className="space-y-3">
-              {tasks.length > 0 ? (
+              {tasks?.length > 0 ? (
                 tasks.map((task) => <TaskItem key={task.id} task={task} />)
               ) : (
                 <p className="text-sm text-textGray">
