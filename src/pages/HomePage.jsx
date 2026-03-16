@@ -22,16 +22,21 @@ const HomePage = () => {
             </div>
 
             <div className="space-y-3">
-              {tasks?.map((task) => (
-                <TaskItem key={task.id} task={task} />
-              ))}
+              {tasks.length > 0 ? (
+                tasks.map((task) => <TaskItem key={task.id} task={task} />)
+              ) : (
+                <p className="text-sm text-textGray">
+                  Você ainda não tem tarefas!
+                </p>
+              )}
             </div>
           </div>
           <div className="bg-white rounded-[10px] p-6 flex items-center justify-center">
-            <p className='text-darkGray'>
+            <p className="text-darkGray">
               "O segredo de progredir é começar. O segredo de começar é quebrar
               suas tarefas complexas e esmagadoras em pequenas tarefas
-              gerenciáveis e começar pela primeira." <span className='font-semibold'>— Mark Twain</span>
+              gerenciáveis e começar pela primeira."{' '}
+              <span className="font-semibold">— Mark Twain</span>
             </p>
           </div>
         </div>
